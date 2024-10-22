@@ -12,9 +12,9 @@ where ABC are the codes for the following effects:
 * R - resonance;
 * W - wah-wah?
 
-Sample echo volume = sample_name[ 21 ] (from 0 to 32);
-Global echo volume = song_title[ 19 ] (from 0 to 100);
-Echo length (in ticks) = song_title[ 18 ] (from 1 to 24);
+Sample echo volume = sample_name[ 21 ] (from 0 to 32);  
+Global echo volume = song_title[ 19 ] (from 0 to 100);  
+Echo length (in ticks) = song_title[ 18 ] (from 1 to 24);  
 yes, i know, it was a stupid way to store the echo parameters...
 
 Non-standard effects (only available in PsyTexx1.x):
