@@ -1,3 +1,15 @@
+/*
+    PsyTexx1 Player
+    by Alexander Zolotov <nightradio@gmail.com>
+    WarmPlace.ru
+
+    Changelog:
+    v1.2 (25 oct 2024): port to pure C, improvements, bugfixes;
+    old versions (2002 - 2006)...
+*/
+
+#define APP_VERSION "1.2"
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -41,7 +53,7 @@ int main( int argc, char **argv )
 
     signal( SIGINT, int_handler );
     printf( "PsyTexx1 MOD Player by Alexander Zolotov / WarmPlace.ru\n" );
-    printf( "(build " __DATE__ "; " __TIME__ ")\n" );
+    printf( "(v" APP_VERSION "; build " __DATE__ "; " __TIME__ ")\n" );
     char* name = NULL;
     if( argc > 1 )
     {

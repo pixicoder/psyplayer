@@ -1,4 +1,4 @@
 Execute one of the MAKE_* bash scripts in Linux/macOS Terminal.
 
 Requirements:
-make, gcc, MinGW (Windows), SDL2 lib
+make, gcc, SDL2 lib

@@ -1,5 +1,7 @@
 /*
-PsyTexx MOD player engine
+    PsyTexx MOD player engine
+    by Alexander Zolotov <nightradio@gmail.com>
+    WarmPlace.ru
 */
 
 #include <stdbool.h>

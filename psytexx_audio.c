@@ -1,5 +1,7 @@
 /*
-PsyTexx simple audio output library
+    PsyTexx simple audio output library
+    by Alexander Zolotov <nightradio@gmail.com>
+    WarmPlace.ru
 */
 
 #include <stdbool.h>
