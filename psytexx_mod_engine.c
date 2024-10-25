@@ -205,7 +205,7 @@ void pmod_player_deinit( pmod_player_s* P )
 
 static void pmod_player_channels_setup( pmod_player_s* P )
 {
-    uint cc;
+    uint32_t cc;
     int vol;
     P->CHANNELS = 4;
     if(P->song.signature[0]=='6') P->CHANNELS = 6;
@@ -332,8 +332,8 @@ static int pmod_player_load_opened_file( pmod_player_s* P, FILE* f )
             sptr->replen = sptr->length - sptr->reppnt;
     }
 
-    uint ECHO = P->song.title[19];
-    uint ECHOLEN = P->song.title[18];
+    uint32_t ECHO = P->song.title[19];
+    uint32_t ECHOLEN = P->song.title[18];
     if( ECHOLEN > 24 ) ECHO = 24;
     if( ECHOLEN == 0 ) ECHOLEN = 24;
     if( ECHO == 0 ) ECHO = 100;
@@ -429,7 +429,7 @@ void pmod_player_play( pmod_player_s* P )
     P->tablepos = 0;
     P->patternpos = 0;
     P->bpm = 125;
-    P->onetick = (((uint)P->playrate*25)<<8)/(P->bpm*10);
+    P->onetick = (((uint32_t)P->playrate*25)<<8)/(P->bpm*10);
     P->patternticks = P->onetick + 1;
     P->speed = 6;
     P->sp = 2;
@@ -603,10 +603,10 @@ void pmod_player_play( pmod_player_s* P )
 
 #define START_ANTICLICK cptr->anticlick = 255; cptr->anticlick_start = cptr->previous_value;
 
-uint pmod_player_render( pmod_player_s* P, int16_t* buffer, uint buffer_size )
+uint32_t pmod_player_render( pmod_player_s* P, int16_t* buffer, uint32_t buffer_size )
 {
     int j;
-    uint k;
+    uint32_t k;
     int i, l, l2, l3, i2, size, ostalos;
     int int1, int2; //for interpolation
     pmod_player_note* nptr;
@@ -623,7 +623,7 @@ uint pmod_player_render( pmod_player_s* P, int16_t* buffer, uint buffer_size )
     int8_t* scope;
     uint16_t CHANNELS;
     uint16_t VOLUME;
-    uint cc; //cur_channel
+    uint32_t cc; //cur_channel
 
     int16_t* echo_buffer;
     int echo_size;
@@ -694,13 +694,13 @@ new_tick:
 		{
 		    cptr->pitch_ticks += cptr->pitch;
 		    k = cptr->pitch_ticks >> 16;
-		    if (k >= (uint)cptr->rep)
+		    if (k >= (uint32_t)cptr->rep)
 		    {
 		        if(cptr->replen>2)
 		        {
-		    	    cptr->pitch_ticks = cptr->pitch_ticks - ((uint)(cptr->replen)<<16);
+		    	    cptr->pitch_ticks = cptr->pitch_ticks - ((uint32_t)(cptr->replen)<<16);
 			} else {
-			    cptr->pitch_ticks = (uint)(cptr->length)<<16;
+			    cptr->pitch_ticks = (uint32_t)(cptr->length)<<16;
 			    cptr->sampdata = 0;
 			}
 		    }
@@ -716,12 +716,12 @@ next_iteration:
                 {
             	    if( cptr->replen > 2 )
                     {
-                        cptr->ticks = cptr->ticks - ((uint)(cptr->replen)<<16);
+                        cptr->ticks = cptr->ticks - ((uint32_t)(cptr->replen)<<16);
                         k = cptr->ticks>>16;
 			if( k >= cptr->rep ) goto next_iteration;
 #ifdef INTERPOLATION
 			lval = (cptr->sampdata[k]*int2)>>16;
-			uint k2 = k + 1;
+			uint32_t k2 = k + 1;
 			if( k2 >= cptr->length ) k2 = k;
 			lval += (cptr->sampdata[k2]*int1)>>16;
 #else 
@@ -735,14 +735,14 @@ next_iteration:
 			lval = lval * cptr->global_volume_l;
 			rval = rval * cptr->global_volume_r;
 		    } else {
-            		cptr->ticks = (uint)(cptr->length)<<16;
+            		cptr->ticks = (uint32_t)(cptr->length)<<16;
 			if( !cptr->pitch ) cptr->sampdata = 0;
 			cptr->previous_value = 0;
                     }
                 } else {
 #ifdef INTERPOLATION
 		    lval = (cptr->sampdata[k]*int2)>>16;
-		    if( k == (uint)cptr->rep - 1 ) { //right sample bound:
+		    if( k == (uint32_t)cptr->rep - 1 ) { //right sample bound:
 		        if( cptr->replen > 2 ) { //loop
 		    	    k = cptr->reppnt;
 			    lval += (cptr->sampdata[k]*int1)>>16;
@@ -836,11 +836,11 @@ next_iteration:
     	    cptr->ticks += cptr->delta;
             k = cptr->ticks>>16;
 	    int1 = cptr->ticks & 0xFFFF; int2 = 0xFFFF - int1;
-            if( k >= (uint)cptr->rep )
+            if( k >= (uint32_t)cptr->rep )
             {
                 if( cptr->replen > 2 )
                 {
-            	    cptr->ticks = cptr->ticks - ((uint)(cptr->replen)<<16);
+            	    cptr->ticks = cptr->ticks - ((uint32_t)(cptr->replen)<<16);
             	    k=cptr->ticks>>16;
 		    l = (cptr->sampdata[k]*int2)>>16;
 		    l += (cptr->sampdata[k+1]*int1)>>16;
@@ -849,14 +849,14 @@ next_iteration:
 		    l = l * cptr->volume * 64;
 		    l2 = l2 * cptr->volume * 64;
                 } else {
-            	    cptr->ticks = (uint)(cptr->length)<<16;
+            	    cptr->ticks = (uint32_t)(cptr->length)<<16;
 		    cptr->sampdata = 0;
 		    l = 0;
 		    l2 = 0;
                 }
             } else {
 	        l = (cptr->sampdata[k]*int2)>>16;
-	        if( k == (uint)cptr->rep - 1 ) { //right sample bound:
+	        if( k == (uint32_t)cptr->rep - 1 ) { //right sample bound:
 		    if( cptr->replen > 2 ) { //loop
 		        k = cptr->reppnt; 
 		        l += (cptr->sampdata[k]*int1)>>16;
@@ -1078,16 +1078,16 @@ static void pmod_player_worknote( pmod_player_note* nptr, pmod_player_channel* c
 	    }
 	    break;
         case 0xF:
-    	    if((uint)(effect&0xFF)<=31){
-		P->speed=(uint)(effect&0xFF);P->sp=P->speed;
+    	    if((uint32_t)(effect&0xFF)<=31){
+		P->speed=(uint32_t)(effect&0xFF);P->sp=P->speed;
             } else {
-                P->bpm=(uint)(effect&0xFF);P->onetick=(((uint)P->playrate*25)<<8)/(P->bpm*10);
+                P->bpm=(uint32_t)(effect&0xFF);P->onetick=(((uint32_t)P->playrate*25)<<8)/(P->bpm*10);
             }
             break;
         case 0xD: P->patternpos = (effect & 0xFF) * 4; P->tablepos++; if(P->tablepos>=song->length){P->tablepos=0;} break;
         case 0xC: cptr->volume = (effect & 0xFF); break;
         case 0xB: P->tablepos = (effect & 0xFF); P->patternpos = 0; break;
-	case 0x4: P->echo_vol = (uint)(effect & 0xFF); break;
+	case 0x4: P->echo_vol = (uint32_t)(effect & 0xFF); break;
         case 0x9: cptr->ticks = ((effect & 0xFF) * 256) << 16; break;
 	case 0x6: cptr->wah_amp = (effect & 0xFF) * 64; break;
     	case 0x7:

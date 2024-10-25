@@ -5,7 +5,7 @@
       ( (((uint16_t)n) >> 8 ) & 0x00FF ) )
 
 #define CHANNELS_MAX 12
-#define PAT_SIZE(CH) (uint)(CH*4*64)
+#define PAT_SIZE(CH) (uint32_t)(CH*4*64)
 
 typedef struct pmod_player_sample
 {
@@ -59,7 +59,7 @@ typedef struct pmod_player_channel {
     int wah_amp;      //...
 
     int pitch;        //pitch delta (0 - off)
-    uint pitch_ticks; //pitch ticks
+    uint32_t pitch_ticks; //pitch ticks
 
     int anticlick;       //0 ... 255
     int anticlick_start; //start sample value
@@ -73,8 +73,8 @@ typedef struct pmod_player_channel {
 
     int8_t * 	sampdata;
     int   	period;
-    uint   	delta;
-    uint   	ticks;
+    uint32_t   	delta;
+    uint32_t   	ticks;
     int  	new_period;
 
     uint16_t    sampnum;
@@ -120,17 +120,17 @@ typedef struct pmod_player_s {
     pmod_player_channel channels2[ 2 ]; //For the single channel play
     int patternticks;
     int onetick;
-    uint sp;
-    uint speed;
-    uint bpm;
+    uint32_t sp;
+    uint32_t speed;
+    uint32_t bpm;
     pmod_player_note *patterndata[64];
     pmod_player_module song;
     int8_t *_buffer;
-    uint sampleticksconst;
+    uint32_t sampleticksconst;
     int8_t periods[1900];
     int8_t *sampledata[31];
     int i2, size;
-    uint _update;
+    uint32_t _update;
     uint16_t tablepos;
     uint16_t patternpos;
     uint16_t playrate;
@@ -151,7 +151,7 @@ void pmod_player_deinit( pmod_player_s* P );
 int pmod_player_load( pmod_player_s* P, const char* filename );
 void pmod_player_show_info( pmod_player_s* P );
 void pmod_player_play( pmod_player_s* P );
-uint pmod_player_render( pmod_player_s* P, int16_t* buffer, uint buffer_size );
+uint32_t pmod_player_render( pmod_player_s* P, int16_t* buffer, uint32_t buffer_size );
 
 #ifdef __cplusplus
 }; //extern "C"
